@@ -1,0 +1,99 @@
+FORMAT: 1A
+HOST: http://polls.apiblueprint.org/
+
+FORMAT: 1A
+
+# Maestroooooooooooooooooo
+qsefes  esfesfes sefe
+AHahaha j'ai hacké ta doc.
+Maestro is a simple API for managing Spark cluster on the fly based on docker swarm and docker machine
+
+# Group Machines
+
+Resources related to the docker-machines in the API
+
+## Machines List [/machines]
+
+### List All Machines [GET]
++ Response 200 (application/json)
+
+        [
+            {
+                "Name":,
+                "Active":,
+                "ActiveHost":,
+                "ActiveSwarm":,
+                "DriverName":,
+                "State":,
+                "URL":,
+                "Swarm":,
+                "Error":,
+                "DockerVersion":,
+                "ResponseTime":
+            }
+        ]
+
+
+### Create a Machine [POST]
+
+You may create a machine using this action. It takes a json object with
+machine name and property.
+
++ name (string) - The name for the machine to create
++ driver_name (string) - Name of the driver for docker-machine (usually virtualbox or cloudprovider name)
++ driver_config (object) - Json object that depend on the driver chosen
++ engine_opt (array[string]) - A collection of option for the machine ~ array("option=value")
++ engine_labels (array[String]) - A Collection of label to add to the machine ~ array("label=value")
++ swarm (boolean) - Flag to indicate if machine join a swarm cluster
++ swarm_opt (array[string]) - Collection of option for swarm ~ array("option=value")
+
+
++ Request (application/json)
+        
+        {
+            "name":,
+            "driver_name":,
+            "driver_config":,
+            "engine_opt":,
+            "engine_labels",
+            "swarm",
+            "swarm_options"
+        }
+
++ Response 201 (application/json) 
+
+    * Headers
+
+    * Body
+
+            {
+                "message": "Machine created"
+            }
+
+
+## Machines Single [/machines/{machine_name}]
+
++ Parameters
+    * machine_name - Name of the machine (string)
+
+
+### View a machine information [GET]
++ Response 200 (application/json)
+    
+        {
+            "ConfigVersion": 3,
+            "Driver": {},
+            "DriverName": "virtualbox",
+            "HostOptions": {},
+                "SwarmOptions": {},
+                "AuthOptions": {}
+            },
+            "Name": "test"
+        }
+
+### Delete a machine [DELETE]
++ Response 200 (application/json)
+
+        {
+            "message": "Removed machine machine_name"
+        }

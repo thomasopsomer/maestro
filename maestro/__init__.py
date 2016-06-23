@@ -3,6 +3,9 @@
 from __future__ import absolute_import
 import logging
 
+from .maestro import Maestro
+from maestro import api, helper
+
 
 # 1. logger
 logger = logging.getLogger("maestro")

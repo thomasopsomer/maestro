@@ -52,11 +52,12 @@ DOCKER_COMPOSE_YML = \
 services:
     master:
         container_name: master
-        image: {}
-        command: /usr/spark/bin/spark-class org.apache.spark.deploy.master.Master -h master
+        image: {image}
+        command: /usr/spark/bin/spark-class org.apache.spark.deploy.master.Master --host master {args}
         hostname: master
         environment:
             - constraint:role==master
+            - constraint:cluster=={cluster_name}
         ports:
             - 4040:4040
             - 6066:6066
@@ -64,26 +65,41 @@ services:
             - 8080:8080
         expose:
             - "8081-8095"
+        networks:
+            - {network_name}
     worker:
-        image: {}
-        command: /usr/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://master:7077
+        image: {image}
+        command: /usr/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://master:7077 {args}
         environment:
             - constraint:role!=master
+            - constraint:cluster=={cluster_name}
         ports:
             - 8081:8081
         expose:
             - "8081-8095"
+        networks:
+            - {network_name}
+
 networks:
-    default:
+    {network_name}:
         driver: overlay
 """
 
 
-def make_docker_compose_yml(path="./docker-compose.yml",
-                            spark_image="gettyimages/spark:1.6.0-hadoop-2.6"):
+def make_docker_compose_yml(cluster_name, network_name="default",
+                            spark_image="gettyimages/spark:1.6.0-hadoop-2.6",
+                            path="./docker-compose.yml", args=""):
     """
+    Generate a compose file with custom image, cluster name and network
     """
-    dc_yml = DOCKER_COMPOSE_YML.format(spark_image, spark_image)
+    # fill the compose file
+    dc_yml = DOCKER_COMPOSE_YML.format(
+        image=spark_image, cluster_name=cluster_name,
+        network_name=network_name, args=args)
+    # write the compose file to disk
     with open(path, "w") as fout:
         fout.write(dc_yml)
+    return True
+
+
 

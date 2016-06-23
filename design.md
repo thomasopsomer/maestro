@@ -10,7 +10,7 @@ On the machine where you want maestro to be running, run start_maestro.sh
 
 # Use case
 
-Maestro orchestrate the deployment of cluster to execute a task contained in a docker
+Maestro orchestrate the deployment of spark clusters to execute a task contained in a docker
 
 Maestro receive an call for
 ```json
